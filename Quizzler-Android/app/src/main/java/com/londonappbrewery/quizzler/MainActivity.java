@@ -62,6 +62,7 @@ public class MainActivity extends Activity {
     int cout = 0;
     int c = 1;
     int NextCount=0;
+    int trueQuiz=0;
 
     TextView editQuiz;
     ProgressBar setProgess;
@@ -107,6 +108,9 @@ public class MainActivity extends Activity {
         textCount = (TextView)findViewById(R.id.textCount);
         showCount = (TextView) findViewById(R.id.Showcount);
         showScore = (TextView) findViewById(R.id.Showscore);
+        showScore.setText("");
+        showCount.setText("");
+        mTxt.setText("");
 
 
         result1 = (TextView)findViewById(R.id.result1);
@@ -130,7 +134,7 @@ public class MainActivity extends Activity {
         ChartAns.setOnValueTouchListener(new PieChartOnValueSelectListener() {
             @Override
             public void onValueSelected(int arcIndex, SliceValue value) {
-                if (AnsList.get(arcIndex).getColor() == Color.parseColor("#ffffff")) {
+                if (AnsList.get(arcIndex).getColor() == Color.parseColor("#D3D3D3")) {
 
                     AnsList.set(arcIndex, (new SliceValue(AnsList.get(arcIndex).getValue(), Color.parseColor("#ffcc00"))));
 
@@ -138,7 +142,7 @@ public class MainActivity extends Activity {
 
                     //System.out.println("Color : " + AnsList.get(arcIndex).getColor()+ "==" +Color.parseColor("#ffcc00"));
                 }else {
-                    AnsList.set(arcIndex, (new SliceValue(AnsList.get(arcIndex).getValue(), Color.parseColor("#ffffff"))));
+                    AnsList.set(arcIndex, (new SliceValue(AnsList.get(arcIndex).getValue(), Color.parseColor("#D3D3D3"))));
 
                     selectAns --;
                 }
@@ -298,7 +302,7 @@ public class MainActivity extends Activity {
             if (i < part){
                 QuizList.add(new SliceValue(p, Color.parseColor("#ffcc00")));
             }else {
-                QuizList.add(new SliceValue(p, Color.parseColor("#ffffff")));
+                QuizList.add(new SliceValue(p, Color.parseColor("#D3D3D3")));
             }
             }
 
@@ -309,7 +313,7 @@ public class MainActivity extends Activity {
         AnsList.clear();
         float p = 100/k;
         for (int i =0 ;i<k;i++) {
-            AnsList.add(new SliceValue(p, Color.parseColor("#ffffff")));
+            AnsList.add(new SliceValue(p, Color.parseColor("#D3D3D3")));
         }
     }
 
@@ -348,7 +352,7 @@ public class MainActivity extends Activity {
             public void onFinish() {
                // mTxt.setText("หมดเวลา");
                 mProgressBar.setProgress(maxProgress);
-                System.out.println("IOOO "+o);
+                checkQuiz(999,o-2);
                 StartQuiz();
 
 
@@ -393,9 +397,14 @@ public class MainActivity extends Activity {
 
     CountDownStartQuiz.start();
 }else{
-    Intent intent = new Intent(MainActivity.this, AboutActivity.class);
-    startActivity(intent);
+         String value="Hello world";
+         Intent i = new Intent(MainActivity.this, AboutActivity.class);
+         i.putExtra("key",value);
+         i.putExtra("quizlist",contactsList.size());
+         i.putExtra("quiztrue",trueQuiz);
+         startActivity(i);
     finish();
+
 }
     }
 
@@ -424,7 +433,7 @@ public class MainActivity extends Activity {
 
     private void checkQuiz (int ans,int no){
       //  System.out.println("IS " + Integer.valueOf(contactsList.get(no).get("anwup")));
-        if (Integer.valueOf(contactsList.get(no).get("anwup")) == ans){
+        if (Integer.valueOf(contactsList.get(no).get("anwup")) == Integer.valueOf(contactsList.get(no).get("anwup"))){
             System.out.println("YESSSS");
             AnsQuiz[no] = true;
             updatescore();
@@ -435,7 +444,9 @@ public class MainActivity extends Activity {
     }
 
     private void updatescore(){
-         pbar.setProgress(1);
+        trueQuiz++;
+        showScore.setText("score: "+(trueQuiz*10));
+        pbar.setProgress(trueQuiz);
     }
 
 
